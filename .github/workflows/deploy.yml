@@ -1,0 +1,28 @@
+name: Deploy (manual)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code on runner
+        uses: actions/checkout@v4
+
+      - name: Load SSH private key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ECS_SSH_PRIVATE_KEY }}
+
+      - name: Deploy over SSH
+        env:
+          ECS_HOST: ${{ secrets.ECS_HOST }}
+          ECS_USER: ${{ secrets.ECS_USER }}
+        run: |
+          if [ -z "${ECS_HOST}" ] || [ -z "${ECS_USER}" ]; then
+            echo "::error::Set ECS_HOST and ECS_USER in Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          ssh -o StrictHostKeyChecking=accept-new "${ECS_USER}@${ECS_HOST}" \
+            'echo "Deploy OK (placeholder). Replace with server-side commands, e.g. cd /path/to/app && git pull && sudo systemctl restart your-service"'
