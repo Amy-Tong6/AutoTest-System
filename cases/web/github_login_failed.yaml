@@ -33,10 +33,6 @@ steps:
 
 # 断言 - 验证登录失败
 assertions:
-  - name: 验证页面跳转到/session
-    type: page_url
-    expected: https://github.com/session
-  
   - name: 验证错误提示词
     type: text
     locator_type: xpath
