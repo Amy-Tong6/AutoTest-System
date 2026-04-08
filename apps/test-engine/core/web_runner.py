@@ -1,6 +1,6 @@
 import time
 from playwright.sync_api import sync_playwright, expect
-from utils import read_file, get_locator_str, replace_variables, get_user
+from utils import read_file, get_locator_str, replace_variables, get_user,get_headless_mode
 
 class WebRunner:
     def __init__(self):
@@ -11,7 +11,7 @@ class WebRunner:
         self.failed = 0
         # 启动 Playwright
         self._playwright = sync_playwright().start()
-        self.browser = self._playwright.chromium.launch(headless=False)
+        self.browser = self._playwright.chromium.launch(headless=get_headless_mode())
         self.page = self.browser.new_page()
 
     def close(self):

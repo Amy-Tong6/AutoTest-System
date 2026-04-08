@@ -2,6 +2,7 @@ import re
 from pathlib import Path
 from typing import List, Optional
 from yaml import full_load
+import sys
 
 # 获取项目根目录
 BASE_DIR = Path(__file__).resolve().parents[3]
@@ -65,3 +66,7 @@ def get_locator_str(data:dict) -> str:
 def get_cases(type: str):
     """获取指定类型的测试用例文件列表"""
     return read_files(str(BASE_DIR / "cases" / type))
+
+def get_headless_mode() -> bool:
+    """获取无头模式"""
+    return not sys.stdin.isatty() # 交换终端用有头，其他用无头
