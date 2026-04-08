@@ -1,6 +1,6 @@
 import time
 from playwright.sync_api import sync_playwright, expect
-from ..utils import read_file, get_locator_str, replace_variables, get_user
+from utils import read_file, get_locator_str, replace_variables, get_user
 
 class WebRunner:
     def __init__(self):

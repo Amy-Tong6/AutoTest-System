@@ -4,19 +4,10 @@ from typing import List, Optional
 from yaml import full_load
 
 # 获取项目根目录
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parents[3]
 
 def read_file(path: str | Path) -> dict:
-    """读取文件
-
-    Args:
-        path: 文件路径
-    Returns:
-        解析后的字典
-    Raises:
-        FileNotFoundError: 文件不存在时
-        Exception: 解析失败时
-    """
+    """读取文件并返回内容"""
     try:
         with open(str(path), "r", encoding="utf-8") as f:
             return full_load(f)
@@ -27,19 +18,7 @@ def read_file(path: str | Path) -> dict:
 
 
 def read_files(directory: str | Path, pattern: Optional[str] = None) -> List[Path]:
-    """读取给定文件夹目录下的所有文件
-    
-    Args:
-        directory: 文件夹路径（可以是字符串或 Path 对象）
-        pattern: 可选的文件匹配模式，如 '*.yaml', '*.py' 等
-        
-    Returns:
-        包含所有文件路径的列表（Path 对象）
-        
-    Raises:
-        NotADirectoryError: 当给定路径不是目录时
-        FileNotFoundError: 当目录不存在时
-    """
+    """读取指定目录下的文件列表"""
     dir_path = Path(directory) if isinstance(directory, str) else directory
     
     if not dir_path.exists():
@@ -66,38 +45,18 @@ def replace_variables(text: str|int, variables_dict: dict) -> str|int:
     return re.sub(r'{{(\w+)}}', replacer, text)
 
 
-def get_user(user_id: str | None = None, config_path: str | Path = None) -> dict:
-    """从配置文件获取用户信息
-    
-    Args:
-        user_id: 用户 ID，不传则使用默认用户
-        config_path: users.yaml 文件路径，不传则使用默认路径
-        
-    Returns:
-        包含用户信息的字典
-        
-    Raises:
-        FileNotFoundError: 当配置文件不存在时
-        KeyError: 当用户 ID 不存在时
-    """
-    if config_path is None:
-        # 使用默认的配置文件路径（config/users.yaml）
-        base_dir = Path(__file__).resolve().parent
-        config_path = base_dir / "config" / "users.yaml"
-    
-    # 读取配置文件
-    users_config = read_file(config_path)
-    
-    # 如果没有指定 user_id，使用默认用户
-    user_id = user_id or users_config.get("default_user")
+def get_user(user_id: str | None = None) -> dict:
+    """获取用户信息"""
+    users = read_file(BASE_DIR / "cases" / "users.yaml")
+    user_id = user_id or users.get("default_user")
     
     if not user_id:
         raise KeyError("未指定用户 ID 且配置文件中没有 default_user")
     
-    if user_id not in users_config.get("users", {}):
+    if user_id not in users.get("users", {}):
         raise KeyError(f"用户 ID '{user_id}' 不存在")
     
-    return users_config["users"][user_id]
+    return users["users"][user_id]
 
 def get_locator_str(data:dict) -> str:
     """获取定位器字符串"""

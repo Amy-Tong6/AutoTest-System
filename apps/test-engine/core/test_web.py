@@ -1,4 +1,5 @@
-from ..utils import get_cases
+from utils import get_cases
+from web_runner import WebRunner
 import allure
 
 @allure.feature("Web UI 测试")
@@ -8,7 +9,6 @@ def test_web_cases():
         cases = get_cases("web")
     
     with allure.step("执行 Web 用例"):
-        from web_runner import WebRunner
         runner = WebRunner()
         runner.run(cases)
     

@@ -14,6 +14,8 @@ def run():
     # 1. 运行测试，生成 allure json 结果
     pytest.main(["--alluredir=allure-results", "-vs"])
 
+    return
+
     # 2. 生成 HTML 报告
     print("\n📊 生成 HTML 报告...")
     subprocess.run([
