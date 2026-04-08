@@ -11,6 +11,7 @@ class WebRunner:
         self.failed = 0
         # 启动 Playwright
         self._playwright = sync_playwright().start()
+        # 无头模式
         self.browser = self._playwright.chromium.launch(headless=True)
         self.page = self.browser.new_page()
 
