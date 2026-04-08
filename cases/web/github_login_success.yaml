@@ -1,0 +1,60 @@
+# 登录 github - 成功场景（完整流程）
+# web → Playwright；app → Appium；api -> Request
+name: 登录-github-成功登录
+enable: false
+reuse_browser: false
+
+# 测试数据 - 有效用户列表（都执行相同的成功流程）
+test_data:
+  - user_id: test_user_01 # users.yaml中的user_id
+
+# 步骤
+steps:
+  - name: 打开登录页
+    action: open
+    value: https://github.com/login
+
+  - name: 输入用户名
+    action: input
+    locator_type: xpath
+    locator_value: //*[@id="login_field"]
+    value: "{{username}}"  # 从 users.yaml 取
+
+  - name: 输入密码
+    action: input
+    locator_type: xpath
+    locator_value: //*[@id="password"]
+    value: "{{password}}"  # 从 users.yaml 取
+
+  - name: 点击登录
+    action: click
+    locator_type: xpath
+    locator_value: //*[@name="commit"]
+
+  - name: 等待登录成功
+    action: wait_for_url
+    value: github.com
+  
+  - name: 点击右上角头像
+    action: click
+    locator_type: xpath
+    locator_value: //button[@data-login]
+  
+  - name: 高亮用户名
+    action: update_attributes
+    locator_type: xpath
+    locator_value: //*[@id="global-nav-user-menu-header"]//div[@title]
+    attributes:
+      style: "border:2px solid red"
+  
+  - name: 等待 3s
+    action: sleep
+    time: 3
+
+# 断言
+assertions:
+  - name: 断言元素内容与用户名相同
+    type: text
+    locator_type: xpath
+    locator_value: //*[@id="global-nav-user-menu-header"]//div[@title]
+    expected: "{{username}}"

@@ -1,0 +1,16 @@
+# 测试账号列表
+users:
+  test_user_01:
+    username: "Amy-Tong6"
+    password: "****"
+    desc: "正确的用户"
+
+  test_user_02:
+    username: "Amy-Tong6"
+    password: "github"
+    desc: "用户密码错误"
+
+  test_user_03:
+    username: "Amy-Tong"
+    password: "github"
+    desc: "用户名不存在"
