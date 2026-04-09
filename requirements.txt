@@ -2,6 +2,7 @@
 pytest>=9.0
 allure-pytest>=2.15
 allure-python-commons>=2.15
+allure-combine>=1.0
 
 # 接口/UI自动化
 requests>=2.33

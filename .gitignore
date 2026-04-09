@@ -6,8 +6,7 @@ venv/
 .venv/
 
 # 测试报告
-allure-report/
-allure-report-tmp/
+allure-reports/
 allure-results/
 
 # cache文件
