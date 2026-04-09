@@ -1,7 +1,7 @@
 # 登录 github - 失败场景（到登录截止）
-name: 登录-github-失败登录
+name: Github-失败登录
 enable: true
-reuse_page: false
+reuse_browser: false
 
 # 测试数据 - 无效用户列表（都执行相同的失败流程）
 test_data:

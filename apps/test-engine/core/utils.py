@@ -62,6 +62,25 @@ def get_locator_str(data:dict) -> str:
     """获取定位器字符串"""
     return f"{data['locator_type']}={data['locator_value']}" if 'locator_type' in data and 'locator_value' in data else None
 
-def get_cases(type: str):
-    """获取指定类型的测试用例文件列表"""
-    return read_files(str(BASE_DIR / "cases" / type))
+def get_cases(type: str)-> list[dict]:
+    """生成测试用例数据"""
+    case_paths = read_files(str(BASE_DIR / "cases" / type))
+    cases = []
+
+    for case_path in case_paths:
+        file = read_file(case_path)
+        details = {k: file.get(k) for k in ['enable', 'name', 'steps', 'assertions', 'reuse_browser']}
+        test_data = file.get('test_data', [])
+
+        if not test_data:
+            cases.append({
+                **details
+            })
+
+        for data in test_data:
+            cases.append({
+                **details,
+                'data': data
+            })
+
+    return cases

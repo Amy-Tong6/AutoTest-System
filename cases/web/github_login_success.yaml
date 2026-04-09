@@ -1,7 +1,7 @@
 # 登录 github - 成功场景（完整流程）
 # web → Playwright；app → Appium；api -> Request
-name: 登录-github-成功登录
-enable: false
+name: Github-成功登录
+enable: true
 reuse_browser: false
 
 # 测试数据 - 有效用户列表（都执行相同的成功流程）

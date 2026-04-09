@@ -41,7 +41,6 @@ def run():
             shutil.copytree("allure-report-tmp/data", "allure-report/data")
     print(f"✅ 报告已更新！{REPORT_URL}")
 
-    return
     # 4.发送飞书消息
     from notify.feishu import send_report
     send_report(REPORT_URL)
