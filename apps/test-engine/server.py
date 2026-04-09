@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 PORT = int(os.getenv("REPORT_SERVER_PORT"))
-REPORT_URL = int(os.getenv("REPORT_SERVER_URL"))
+REPORT_URL = os.getenv("REPORT_SERVER_URL")
 
 def start_static_server():
     # 确保报告文件夹存在

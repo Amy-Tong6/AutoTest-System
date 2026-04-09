@@ -36,7 +36,7 @@ def send_report(report_url):
                 "elements": [
                     {
                         "tag": "markdown",
-                        "content": "<at id=all></at>\n✅ 研发代码已更新\n🚀 自动化测试报告已生成\n🔥 请点击下方按钮查看详细报告",
+                        "content": "<at id=all></at>\n🚀 自动化测试报告已生成\n🔥 请点击下方按钮查看详细报告",
                         "text_align": "left",
                         "text_size": "normal_v2",
                         "margin": "0px 0px 0px 0px"

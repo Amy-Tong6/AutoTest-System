@@ -14,8 +14,6 @@ def run():
     # 1. 运行测试，生成 allure json 结果
     pytest.main(["--alluredir=allure-results", "-vs"])
 
-    return
-
     # 2. 生成 HTML 报告
     print("\n📊 生成 HTML 报告...")
     subprocess.run([
@@ -41,7 +39,7 @@ def run():
         if os.path.exists("allure-report/data"):
             shutil.rmtree("allure-report/data")
             shutil.copytree("allure-report-tmp/data", "allure-report/data")
-    print("✅ 报告已更新！")
+    print(f"✅ 报告已更新！{REPORT_URL}")
 
     # 4.发送飞书消息
     from notify.feishu import send_report
