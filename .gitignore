@@ -7,7 +7,6 @@ venv/
 
 # 测试报告
 allure-reports/
-allure-results/
 
 # cache文件
 __pycache__/

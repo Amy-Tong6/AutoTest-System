@@ -46,6 +46,7 @@ class Github:
 
         while time.time() - start_time < timeout:
             try:
+                time.sleep(interval)
                 response = requests.get(
                     self.url,
                     headers={"Cache-Control": "no-cache"},
@@ -58,8 +59,6 @@ class Github:
                     print(f"🔄 页面部署中... {interval}秒后重试")
             except Exception as e:
                 print(f"⚠️ 检查失败：{str(e)}")
-
-            time.sleep(interval)
 
         print(f"❌ 页面部署超时：{self.url}")
         return False
