@@ -1,7 +1,7 @@
 import time
 import allure
 from playwright.sync_api import sync_playwright, expect
-from utils import get_locator_str, replace_variables, get_user
+from helpers import get_locator_str, replace_variables, get_user
 
 headless = True
 

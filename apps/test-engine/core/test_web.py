@@ -1,4 +1,4 @@
-from utils import get_cases
+from helpers import get_cases
 import allure
 import pytest
 
