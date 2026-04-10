@@ -11,5 +11,7 @@ allure-results/
 
 # cache文件
 __pycache__/
-
 .idea/
+
+# 客户配置信息
+config.yaml
