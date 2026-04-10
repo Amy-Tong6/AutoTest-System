@@ -6,11 +6,11 @@ venv/
 .venv/
 
 # 测试报告
-allure-report/
-allure-report-tmp/
-allure-results/
+allure-reports/
 
 # cache文件
 __pycache__/
-
 .idea/
+
+# 客户配置信息
+config.yaml
