@@ -88,3 +88,6 @@ class WebRunner:
             assert expected == actual_url, f"期望URL '{expected}' 不等于实际URL '{actual_url}'"
         else:
             raise ValueError(f"不支持的断言类型：{assertion_type}")
+
+    def screenshot(self):
+        return self._page.screenshot()
