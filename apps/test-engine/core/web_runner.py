@@ -46,11 +46,6 @@ class WebRunner:
             with allure.step(f"步骤{i+1}: {step['name']}"):
                 self._handle_step(step, user_info)
 
-        # 遍历断言，标记 Allure 断言步骤
-        for i,assertion in enumerate(assertions):
-            with allure.step(f"断言{i+1}: {assertion['name']}"):
-                self._handle_assertion(assertion, user_info)
-
     def _handle_step(self,step,data):
         """执行单个步骤的逻辑"""
         action = step['action']
@@ -66,28 +61,27 @@ class WebRunner:
         elif action == 'input':
             self._page.fill(locator, value)
         elif action == 'click':
-            self._page.click(locator,force=True)
+            self._page.click(locator)
         elif action == 'update_attributes':
             element = self._page.locator(locator)
             # 使用 JavaScript 设置元素属性
             for attr_name, attr_value in step['attributes'].items():
                 element.evaluate(f"(el) => {{ el.setAttribute('{attr_name}', '{attr_value}') }}")
+        elif action == 'assert':
+            self._handle_assertion(step, data)
 
-    def _handle_assertion(self, assertion, data):
+    def _handle_assertion(self, step, data):
         """处理断言"""
-        assertion_type = assertion['type']
-        expected = replace_variables(assertion['expected'], data)
+        type = step['type']
+        expected = replace_variables(step['expected'], data)
 
-        if assertion_type == 'text':
-            locator = get_locator_str(assertion)
+        if type == 'text':
+            locator = get_locator_str(step)
             element = self._page.locator(locator)
             actual_text = element.text_content()
             assert expected in actual_text, f"期望文本 '{expected}' 不在元素文本 '{actual_text}' 中"
-        elif assertion_type == 'page_url':
-            actual_url = self._page.url
-            assert expected == actual_url, f"期望URL '{expected}' 不等于实际URL '{actual_url}'"
         else:
-            raise ValueError(f"不支持的断言类型：{assertion_type}")
+            raise ValueError(f"不支持的断言类型：{type}")
 
     def screenshot(self):
         return self._page.screenshot()

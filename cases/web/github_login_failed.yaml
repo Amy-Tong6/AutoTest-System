@@ -31,9 +31,8 @@ steps:
     locator_type: xpath
     locator_value: //*[@name="commit"]
 
-# 断言 - 验证登录失败
-assertions:
-  - name: 验证错误提示词
+  - name: 验证登录失败提示词
+    action: assert
     type: text
     locator_type: xpath
     locator_value: //*[@id="js-flash-container"]//div[@class="js-flash-alert"]

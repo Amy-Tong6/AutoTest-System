@@ -51,9 +51,8 @@ steps:
     action: sleep
     time: 3
 
-# 断言
-assertions:
   - name: 断言元素内容与用户名相同
+    action: assert
     type: text
     locator_type: xpath
     locator_value: //*[@id="global-nav-user-menu-header"]//div[@title]
