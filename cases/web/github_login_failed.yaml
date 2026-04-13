@@ -3,10 +3,14 @@ name: Github-失败登录
 enable: true
 reuse_browser: false
 
-# 测试数据 - 无效用户列表（都执行相同的失败流程）
+# 测试数据 - 多条数据驱动
 test_data:
-  - user_id: test_user_02
-  - user_id: test_user_03
+  - username: "Amy-Tong6"
+    password: "123"
+    description: "用户密码错误"
+  - username: "Amy"
+    password: "123"
+    description: "用户名不存在"
 
 # 步骤 - 简化的流程，只到点击登录为止
 steps:
@@ -31,9 +35,8 @@ steps:
     locator_type: xpath
     locator_value: //*[@name="commit"]
 
-# 断言 - 验证登录失败
-assertions:
-  - name: 验证错误提示词
+  - name: 验证登录失败提示词
+    action: assert
     type: text
     locator_type: xpath
     locator_value: //*[@id="js-flash-container"]//div[@class="js-flash-alert"]

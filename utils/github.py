@@ -2,7 +2,6 @@
 import os
 from pathlib import Path
 import requests
-import yaml
 import shutil
 import subprocess
 import time
@@ -11,20 +10,12 @@ BASE_DIR = Path(__file__).parent.parent
 CONFIG_PATH = BASE_DIR / "config.yaml"
 
 class Github:
-    def __init__(self, customer_id: str, file_path: Path):
+    def __init__(self, report_repo: dict, file_path: Path):
         self.file_path = file_path
         self.file_name = os.path.basename(file_path)
 
-        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            customers = yaml.safe_load(f)["customers"]
-
-        if customer_id not in customers:
-            raise Exception(f"客户 {customer_id} 未配置")
-
-        customer = customers[customer_id]
-
-        self.local_repo = customer["local_repo"]
-        self.url = f"https://{customer["user_name"]}.github.io/{customer["repo_name"]}/{self.file_name}"
+        self.local_repo = report_repo["local_repo"]
+        self.url = f"https://{report_repo["user_name"]}.github.io/{report_repo["repo_name"]}/{self.file_name}"
 
     def _update_local(self):
         """拉取最新代码"""

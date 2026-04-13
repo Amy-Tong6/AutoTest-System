@@ -4,7 +4,7 @@ from typing import List, Optional
 from yaml import full_load
 
 # 获取项目根目录
-BASE_DIR = Path(__file__).resolve().parents[3]
+BASE_DIR = Path(__file__).resolve().parents[1]
 
 def read_file(path: str | Path) -> dict:
     """读取文件并返回内容"""
@@ -44,20 +44,6 @@ def replace_variables(text: str|int, variables_dict: dict) -> str|int:
         return str(variables_dict.get(var, match.group(0)))  # 如果变量不存在，保留原 {{var}}
     return re.sub(r'{{(\w+)}}', replacer, text)
 
-
-def get_user(user_id: str | None = None) -> dict:
-    """获取用户信息"""
-    users = read_file(BASE_DIR / "cases" / "users.yaml")
-    user_id = user_id or users.get("default_user")
-    
-    if not user_id:
-        raise KeyError("未指定用户 ID 且配置文件中没有 default_user")
-    
-    if user_id not in users.get("users", {}):
-        raise KeyError(f"用户 ID '{user_id}' 不存在")
-    
-    return users["users"][user_id]
-
 def get_locator_str(data:dict) -> str:
     """获取定位器字符串"""
     return f"{data['locator_type']}={data['locator_value']}" if 'locator_type' in data and 'locator_value' in data else None
@@ -84,3 +70,8 @@ def get_cases(type: str)-> list[dict]:
             })
 
     return cases
+
+def get_config(customer_id: str, key: str):
+    """获取用户配置信息"""
+    file = read_file(str(BASE_DIR / "config" / f"{customer_id}.yaml"))
+    return file.get(key)

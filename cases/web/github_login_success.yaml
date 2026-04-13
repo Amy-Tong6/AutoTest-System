@@ -4,9 +4,11 @@ name: Github-成功登录
 enable: false
 reuse_browser: false
 
-# 测试数据 - 有效用户列表（都执行相同的成功流程）
+# 测试数据 - 多条数据驱动
 test_data:
-  - user_id: test_user_01 # users.yaml中的user_id
+  - username: "Amy-Tong6"
+    password: "***" # 测试数据，请自行修改
+    description: "正确的用户"
 
 # 步骤
 steps:
@@ -18,13 +20,13 @@ steps:
     action: input
     locator_type: xpath
     locator_value: //*[@id="login_field"]
-    value: "{{username}}"  # 从 users.yaml 取
+    value: "{{username}}"
 
   - name: 输入密码
     action: input
     locator_type: xpath
     locator_value: //*[@id="password"]
-    value: "{{password}}"  # 从 users.yaml 取
+    value: "{{password}}"
 
   - name: 点击登录
     action: click
@@ -51,9 +53,8 @@ steps:
     action: sleep
     time: 3
 
-# 断言
-assertions:
   - name: 断言元素内容与用户名相同
+    action: assert
     type: text
     locator_type: xpath
     locator_value: //*[@id="global-nav-user-menu-header"]//div[@title]
