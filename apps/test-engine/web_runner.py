@@ -1,7 +1,8 @@
 import time
 import allure
-from playwright.sync_api import sync_playwright, expect
-from helpers import get_locator_str, replace_variables
+import pytest
+from playwright.sync_api import sync_playwright
+from utils.helpers import get_locator_str, replace_variables
 
 headless = True
 
@@ -27,14 +28,18 @@ class WebRunner:
 
     def run(self, test_case: dict):
         """执行单组 DDT 测试数据"""
-        name, steps, assertions, data, reuse_browser = (
-            test_case.get(k) for k in ['name', 'steps', 'assertions', 'data', 'reuse_browser']
+        enable, name, steps, assertions, data, reuse_browser = (
+            test_case.get(k) for k in ['enable', 'name', 'steps', 'assertions', 'data', 'reuse_browser']
         )
         desc = data.get('description')
 
         # Allure 动态标记
         allure.dynamic.title(f"{name} - {desc}")
         allure.dynamic.story(name)
+
+        # 检查用例是否启用
+        if not enable:
+            pytest.skip(f"用例未启用")
 
         # 重启浏览器（如果需要）
         if not reuse_browser:

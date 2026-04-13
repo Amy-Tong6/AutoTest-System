@@ -4,7 +4,7 @@ from typing import List, Optional
 from yaml import full_load
 
 # 获取项目根目录
-BASE_DIR = Path(__file__).resolve().parents[3]
+BASE_DIR = Path(__file__).resolve().parents[1]
 
 def read_file(path: str | Path) -> dict:
     """读取文件并返回内容"""
@@ -70,3 +70,8 @@ def get_cases(type: str)-> list[dict]:
             })
 
     return cases
+
+def get_config(customer_id: str, key: str):
+    """获取用户配置信息"""
+    file = read_file(str(BASE_DIR / "config" / f"{customer_id}.yaml"))
+    return file.get(key)

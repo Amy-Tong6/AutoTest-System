@@ -3,13 +3,28 @@ import pytest
 from web_runner import WebRunner
 from api_runner import ApiRunner
 import json
+
+# ==============================================
+# 🔥 注册 --client 参数
+# ==============================================
+def pytest_addoption(parser):
+    # 注册命令行参数 --client
+    parser.addoption(
+        "--client",
+        action="store",
+        default="test",
+        help="要运行的客户：github / ali / test"
+    )
+
 # ==============================================
 # 🔥 只给 WEB 用例使用
 # ==============================================
 @pytest.fixture(scope="module")
-def web_runner():
+def web_runner(request):
     # 前置：
-    print("\n🚀 开始运行 Web Runner")
+    # 从命令行获取 --client 参数
+    client = request.config.getoption("--client")
+    print(f"\n🚀 开始运行 Web Runner，当前客户：{client}")
     runner = WebRunner()
 
     yield runner  # 提供给测试用例
@@ -22,10 +37,13 @@ def web_runner():
 # 🔥 只给 API 用例使用
 # ==============================================
 @pytest.fixture(scope="module")
-def api_runner():
+def api_runner(request):
     # 前置：
-    print("\n🚀 开始运行 API Runner")
-    runner = ApiRunner()
+    # 从命令行获取 --client 参数
+    client = request.config.getoption("--client")
+
+    print(f"\n🚀 启动 API Runner，当前客户：{client}")
+    runner = ApiRunner(client)
 
     yield runner  # 提供给测试用例
 
@@ -35,7 +53,7 @@ def api_runner():
 
 
 # ==============================================
-# 🔥 内置钩子可以监听用例结果
+# 🔥 内置钩子可以监听用例结果, 失败展示截图 or 日志
 # tryfirst:优先执行
 # hookwrapper: 包裹测试用例执行
 # ==============================================

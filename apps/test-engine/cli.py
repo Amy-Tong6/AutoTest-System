@@ -6,14 +6,15 @@ from pathlib import Path
 from datetime import datetime
 from utils.github import Github
 from utils.feishu import Feishu
+from utils.helpers import get_config
 
 BASE_DIR = Path(__file__).parents[2] # AutoTest-System
 
-def run(customer_id: str):
+def run(client_id: str):
     # 1. 准备报告目录
     print("📃 准备报告文件夹")
     timestamp = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
-    report_dir = BASE_DIR / "allure-reports" / customer_id
+    report_dir = BASE_DIR / "allure-reports" / client_id
     os.makedirs(report_dir, exist_ok=True)  # 已经存在不报错
 
     tmp_result_dir = report_dir / f"{timestamp}_result" # 测试结果文件夹
@@ -24,7 +25,8 @@ def run(customer_id: str):
     print("🚀 开始执行测试...")
     pytest.main([
         "--alluredir", str(tmp_result_dir),
-        "-vs"
+        "-vs",
+        "--client", "github"
     ])
 
     # 3. 生成原始报告
@@ -54,11 +56,14 @@ def run(customer_id: str):
 
     # 7. 推送到GitHub + 等待部署
     print("📤 发布到GitHub...")
-    report_url = Github(customer_id, report_path).publish_file()
+    report_repo = get_config(client_id, "report_repo")
+    report_url = Github(report_repo, report_path).publish_file()
 
     # 8.飞书消息：@所有人 + 报告链接
+    feishu_webhook = get_config(client_id, "feishu_webhook")
     Feishu.send_message(
-        f"<at user_id=\"all\"></at>\n🚀 测试报告已出炉！各位大佬请检阅～ 🙏\n{report_url}"
+        feishu_webhook,
+        f"<at user_id=\"all\"></at>\n🚀 测试报告已出炉！各位大佬请检阅～ 🙏\n{report_url}",
     )
     print(f"🌍 访问链接：{report_url}")
 

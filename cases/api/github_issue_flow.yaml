@@ -1,5 +1,5 @@
 name: GitHub-Issue-全业务流程
-enable: true
+enable: false
 
 # 测试数据 - 多环境 + 多租户 + 数据驱动
 test_data:

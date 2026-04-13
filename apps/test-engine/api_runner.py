@@ -1,18 +1,15 @@
 import allure
+import pytest
 import requests
-import os
-from helpers import replace_variables
-from dotenv import load_dotenv
-
-load_dotenv()
-ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+from utils.helpers import replace_variables, get_config
 
 class ApiRunner:
-    def __init__(self):
+    def __init__(self, client_id):
         # 初始化-作为前置处理
+        api_access_token = get_config(client_id, "api_access_token")
         self.session = requests.session()
         self.session.headers = {
-            "Authorization": f"Bearer {ACCESS_TOKEN}",
+            "Authorization": f"Bearer {api_access_token}",
             "Content-Type": "application/json",
             "Accept": "application/vnd.github+json",
             "X-GitHub-Api-Version": "2026-03-10"
@@ -23,11 +20,15 @@ class ApiRunner:
         self.session = None
 
     def run(self, test_case):
-        name, steps, data = test_case.get("name"), test_case.get("steps"), test_case.get("data")
+        enable, name, steps, data = test_case.get("enable"), test_case.get("name"), test_case.get("steps"), test_case.get("data")
 
         # Allure 动态标记
         allure.dynamic.title(f"{name}")
         allure.dynamic.story(name)
+
+        # 检查用例是否启用
+        if not enable:
+            pytest.skip(f"用例未启用")
 
         for i, step in enumerate(steps):
             with allure.step(f"步骤{i + 1}: {step['name']}"):
