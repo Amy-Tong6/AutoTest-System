@@ -44,20 +44,6 @@ def replace_variables(text: str|int, variables_dict: dict) -> str|int:
         return str(variables_dict.get(var, match.group(0)))  # 如果变量不存在，保留原 {{var}}
     return re.sub(r'{{(\w+)}}', replacer, text)
 
-
-def get_user(user_id: str | None = None) -> dict:
-    """获取用户信息"""
-    users = read_file(BASE_DIR / "cases" / "users.yaml")
-    user_id = user_id or users.get("default_user")
-    
-    if not user_id:
-        raise KeyError("未指定用户 ID 且配置文件中没有 default_user")
-    
-    if user_id not in users.get("users", {}):
-        raise KeyError(f"用户 ID '{user_id}' 不存在")
-    
-    return users["users"][user_id]
-
 def get_locator_str(data:dict) -> str:
     """获取定位器字符串"""
     return f"{data['locator_type']}={data['locator_value']}" if 'locator_type' in data and 'locator_value' in data else None

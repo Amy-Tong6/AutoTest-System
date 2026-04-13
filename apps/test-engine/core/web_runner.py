@@ -1,7 +1,7 @@
 import time
 import allure
 from playwright.sync_api import sync_playwright, expect
-from helpers import get_locator_str, replace_variables, get_user
+from helpers import get_locator_str, replace_variables
 
 headless = True
 
@@ -30,11 +30,10 @@ class WebRunner:
         name, steps, assertions, data, reuse_browser = (
             test_case.get(k) for k in ['name', 'steps', 'assertions', 'data', 'reuse_browser']
         )
-        user_id = data.get('user_id')
-        user_info = get_user(user_id)
+        desc = data.get('description')
 
         # Allure 动态标记
-        allure.dynamic.title(f"{name} - {user_id}")
+        allure.dynamic.title(f"{name} - {desc}")
         allure.dynamic.story(name)
 
         # 重启浏览器（如果需要）
@@ -44,9 +43,9 @@ class WebRunner:
         # 遍历步骤，标记 Allure 步骤
         for i,step in enumerate(steps):
             with allure.step(f"步骤{i+1}: {step['name']}"):
-                self._handle_step(step, user_info)
+                self._handle_step(step, data)
 
-    def _handle_step(self,step,data):
+    def _handle_step(self, step, data):
         """执行单个步骤的逻辑"""
         action = step['action']
         value = replace_variables(step['value'], data) if 'value' in step else None  # 替换变量
