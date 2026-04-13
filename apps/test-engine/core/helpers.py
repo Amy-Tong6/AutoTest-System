@@ -41,7 +41,7 @@ def replace_variables(text: str|int, variables_dict: dict) -> str|int:
     
     def replacer(match):
         var = match.group(1) # 变量名为 {{var}} 中的 var
-        return variables_dict.get(var, match.group(0))  # 如果变量不存在，保留原 {{var}}
+        return str(variables_dict.get(var, match.group(0)))  # 如果变量不存在，保留原 {{var}}
     return re.sub(r'{{(\w+)}}', replacer, text)
 
 

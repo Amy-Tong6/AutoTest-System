@@ -1,0 +1,57 @@
+name: GitHub-Issue-全业务流程
+enable: true
+
+# 测试数据 - 多环境 + 多租户 + 数据驱动
+test_data:
+  - user_name: Amy-Tong6
+    repo_name: AutoTest-System
+    base_url: https://api.github.com
+
+# 步骤 （支持参数提取）
+steps:
+  # 1. 创建 Issue
+  - name: 创建自动化测试Issue
+    method: POST
+    path: /repos/{{user_name}}/{{repo_name}}/issues
+    json:
+      title: "【自动化测试】创建Issue"
+      body: "本条Issue由接口自动化测试创建，用于全流程测试"
+    extract:
+      issue_number: json.number
+    assert:
+      status_code: 201
+      json.title: "【自动化测试】创建Issue"
+
+  # 2. 修改标题
+  - name: 修改Issue标题
+    method: PATCH
+    path: /repos/{{user_name}}/{{repo_name}}/issues/{{issue_number}}
+    json:
+      title: "【自动化测试】已修改标题"
+    assert:
+      status_code: 200
+      json.title: "【自动化测试】已修改标题"
+
+  # 3. 锁定 Issue（修复：删除 json，GitHub API 不需要）
+  - name: 锁定Issue
+    method: PUT
+    path: /repos/{{user_name}}/{{repo_name}}/issues/{{issue_number}}/lock
+    assert:
+      status_code: 204
+
+  # 4. 解锁 Issue
+  - name: 解锁Issue
+    method: DELETE
+    path: /repos/{{user_name}}/{{repo_name}}/issues/{{issue_number}}/lock
+    assert:
+      status_code: 204
+
+  # 5. 关闭 Issue
+  - name: 关闭Issue
+    method: PATCH
+    path: /repos/{{user_name}}/{{repo_name}}/issues/{{issue_number}}
+    json:
+      state: closed
+    assert:
+      status_code: 200
+      json.state: "closed"
