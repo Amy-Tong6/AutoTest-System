@@ -44,14 +44,14 @@ class WebRunner:
         # 遍历步骤，标记 Allure 步骤
         for i,step in enumerate(steps):
             with allure.step(f"步骤{i+1}: {step['name']}"):
-                self.handle_step(step, user_info)
+                self._handle_step(step, user_info)
 
         # 遍历断言，标记 Allure 断言步骤
         for i,assertion in enumerate(assertions):
             with allure.step(f"断言{i+1}: {assertion['name']}"):
-                self.handle_assertion(assertion, user_info)
+                self._handle_assertion(assertion, user_info)
 
-    def handle_step(self,step,data):
+    def _handle_step(self,step,data):
         """执行单个步骤的逻辑"""
         action = step['action']
         value = replace_variables(step['value'], data) if 'value' in step else None  # 替换变量
@@ -73,7 +73,7 @@ class WebRunner:
             for attr_name, attr_value in step['attributes'].items():
                 element.evaluate(f"(el) => {{ el.setAttribute('{attr_name}', '{attr_value}') }}")
 
-    def handle_assertion(self, assertion, data):
+    def _handle_assertion(self, assertion, data):
         """处理断言"""
         assertion_type = assertion['type']
         expected = replace_variables(assertion['expected'], data)
